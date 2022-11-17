@@ -2,24 +2,52 @@ from math import ceil
 
 
 class Surface():
-    def __init__(self, height, width):
-        self.height = height
-        self.width = width
-        self.area = self.get_area()
-
-    def get_area(self):
+    def __init__(self):
+        self.height = 0
+        self.width = 0
+        self.name = ""
+        self.area = 0
+    
+    def calculate_area(self):
         return self.height * self.width
+    
+    def set_name(self):
+        self.name = input("What is the name of your surface?\n")
 
+    def set_height(self):
+        self.height = float(input("How high is your " + self.name + " in meters?\n"))
+        
+    def set_width(self):
+        self.width = float(input("How wide is your " + self.name + " in meters?\n"))
+
+    def set_area(self):
+        self.area = self.calculate_area()
+        
+    def set_attributes(self):
+        self.set_name()
+        self.set_height()
+        self.set_width()
+        self.set_area()
+        
 
 class Wall(Surface):
-    def __init__(self, height, width, coats):
-        super().__init__(height, width)
-        self.coats = coats
+    def __init__(self):
+        super().__init__()
+        self.name = "wall"
+        self.coats = 0
+
+    def set_attributes(self):
+        self.set_height()
+        self.set_width()
+        self.set_area()
+        self.set_coats()
+        
+    def set_coats(self):
+        self.coats = int(input("How many coats of paint would your " + self.name + " need?\n"))
 
 
 def calculate_liters_of_paint(area, coats, coverage):
     return (area*coats)/coverage
-
 
 def round_up_2dp(float):
     return ceil(float * 100) / 100
@@ -32,10 +60,9 @@ def main():
             "\nType 1 if you'd like to add a wall, type 0 if you're finished adding walls\n")
         match add_wall_inp:
             case "1":
-                h = float(input("How high is your wall in meters?\n"))
-                w = float(input("How wide is your wall in meters?\n"))
-                coats = int(input("How many coats of paint would you like?\n"))
-                walls_list.append(Wall(h, w, coats))
+                wall = Wall()
+                wall.set_attributes()
+                walls_list.append(wall)
             case "0":
                 total_liters = 0
                 for wall in walls_list:
