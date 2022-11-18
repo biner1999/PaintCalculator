@@ -1,0 +1,44 @@
+{
+    "Good Home": {
+        "colors": {
+            "Brilliant White": {
+                "coverage": 13,
+                "buckets": [
+                    {
+                        "price": 12,
+                        "volume": 2.5
+                    },
+                    {
+                        "price": 14,
+                        "volume": 5
+                    },
+                    {
+                        "price": 20,
+                        "volume": 10
+                    }
+                ]
+            }
+        }
+    },
+    "Dulux": {
+        "colors": {
+            "Brilliant White": {
+                "coverage": 13,
+                "buckets": [
+                    {
+                        "price": 18,
+                        "volume": 2.5
+                    },
+                    {
+                        "price": 20,
+                        "volume": 5
+                    },
+                    {
+                        "price": 24,
+                        "volume": 10
+                    }
+                ]
+            }
+        }
+    }
+}

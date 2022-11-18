@@ -2,27 +2,6 @@ import Classes.classes as classes
 import Functions.functions as functions
 
 
-
-"""
-class Paint():
-    def __init__(self, brand, coverage, color):
-        self.brand = brand
-        self.coverage = coverage
-        self.color = color
-
-class BucketOfPaint(Paint):
-    def __init__(self, brand, coverage, color, volume, price):
-        super().__init__(brand, coverage, color)
-        self.volume = volume
-        self.price = price
-
-paint = Paint("Good Home", 13, "Brilliant White")
-bucket = BucketOfPaint(paint.brand, paint.coverage, paint.color, 2.5, 10)
-list_of_buckets = [BucketOfPaint(paint.brand, paint.coverage, paint.color, 2.5, 10)]
-buckets_of_paint = {2.5:12, 5:14, 10:20}
-"""
-
-
 def main():
     walls_list = []
     while True:
@@ -44,23 +23,51 @@ def main():
                 del wall
             #After all the walls have been added    
             case "0":
-                total_liters = 0
+                #Loading json with paints
+                paints = functions.load_paints()
+                #Choosing a brand
+                chosen_brand = functions.choose_item("brand", paints)
+                colors = paints[chosen_brand]["colors"]
+                
+                chosen_color = functions.choose_item("color", colors)
+                selected_paint = colors[chosen_color]
+                
+                liters_total = 0
                 for wall in walls_list:
                     wall.set_true_wall_area()
-                    total_liters += functions.calculate_liters_of_paint(wall.true_area, wall.coats, 13)
+                    liters_total += functions.calculate_liters_of_paint(wall.true_area, wall.coats, selected_paint["coverage"])
+                
+
+                print(selected_paint["buckets"])
+                volume_price_dict = {dict["volume"]:dict["price"] for dict in selected_paint["buckets"]}
+                liters_leftover, buckets_count_dict = functions.buckets_needed(liters_total, volume_price_dict.keys())
+                
+                price_total = 0
+                for volume, count in buckets_count_dict.items():
+                    price_total += count * volume_price_dict[volume]
+                
                 
                 #Just print statements
                 print("\nTo paint walls: ")
                 for wall in walls_list:
-                    print("\n" + str(wall.height) + " meters high by " + str(wall.width) + " meters wide with " + str(wall.coats) + " coats of paint.")
+                    print(str(wall.height) + " meters high by " + str(wall.width) + " meters wide with " + str(wall.coats) + " coats of paint.")
                     print("This wall contains:")
                     for surface in wall.surfaces_list:
                         print(surface.name + " of size " + str(surface.height) + " by " + str(surface.width) + " meters.")
-                print("You will need " + str(total_liters) +" liters of paint in total to paint all these walls")
+                    print("\n")
+                print("You will need " + str(liters_total) +" liters of " + chosen_brand + " " +  chosen_color + " in total to paint all these walls")
+                print("This means you will need:")
+                for volume, count in buckets_count_dict.items():
+                    print(str(count) + " of " + str(volume) + " liters buckets")
+                print("And it wil cost £" + str(price_total) + " and you will be left with " + str(liters_leftover) + " liters of paint")1
                 break
             case _:
                 print("Wrong value inputted")
 
 
 if __name__ == "__main__":
+    pass
     main()
+    
+    
+    
