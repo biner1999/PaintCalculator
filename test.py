@@ -1,20 +1,27 @@
-import Functions.functions as functions
-
-volume = 156
 
 
-def buckets_needed(volume, sizes):
-    sizes_sorted = sorted(sizes)
-    count_dict = {i:0 for i in sizes_sorted}
-    while (volume > 0) & bool(sizes_sorted):
-        if volume >= sizes_sorted[-1]:
-            volume -= sizes_sorted[-1]
-            count_dict[sizes_sorted[-1]] += 1
-        elif (volume < sizes_sorted[-1]):
-            sizes_sorted.pop()
-            volume -= sizes_sorted[-1]
-            count_dict[sizes_sorted[-1]] += 1
-    volume_leftover = volume
-    return volume_leftover, count_dict
+volume_price_dict = {2.5:12, 5:14, 10:20}
 
-print(buckets_needed(volume, [2.5, 5, 10]))
+
+def pounds_per_liter(volume_price_dict):
+    
+
+    volume_PpL_dict = {volume:(price/volume) for volume, price in volume_price_dict.items()}
+
+    return volume_PpL_dict
+
+
+
+def optimize_PpL(volume_PpL_dict):
+    best_vol = 0
+    for volume, PpL in volume_PpL_dict.keys():
+        if best_vol 
+
+
+print(pounds_per_liter(volume_price_dict))
+
+volume_PpL_dict = pounds_per_liter(volume_price_dict)
+
+print(optimize_PpL(volume_PpP_dict))
+
+var1 = optimize_PpL(volume_PpP_dict)

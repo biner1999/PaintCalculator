@@ -38,7 +38,7 @@ def main():
                     liters_total += functions.calculate_liters_of_paint(wall.true_area, wall.coats, selected_paint["coverage"])
                 
 
-                print(selected_paint["buckets"])
+                print()
                 volume_price_dict = {dict["volume"]:dict["price"] for dict in selected_paint["buckets"]}
                 liters_leftover, buckets_count_dict = functions.buckets_needed(liters_total, volume_price_dict.keys())
                 
@@ -48,7 +48,7 @@ def main():
                 
                 
                 #Just print statements
-                print("\nTo paint walls: ")
+                print("To paint walls: \n")
                 for wall in walls_list:
                     print(str(wall.height) + " meters high by " + str(wall.width) + " meters wide with " + str(wall.coats) + " coats of paint.")
                     print("This wall contains:")
@@ -59,7 +59,7 @@ def main():
                 print("This means you will need:")
                 for volume, count in buckets_count_dict.items():
                     print(str(count) + " of " + str(volume) + " liters buckets")
-                print("And it wil cost £" + str(price_total) + " and you will be left with " + str(liters_leftover) + " liters of paint")1
+                print("And it wil cost £" + str(price_total) + " and you will be left with " + str(liters_leftover) + " liters of paint")
                 break
             case _:
                 print("Wrong value inputted")
