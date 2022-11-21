@@ -2,9 +2,41 @@ import Classes.classes as classes
 import math
 import json
 
-def calculate_liters_of_paint(area, coats, coverage):
-    return (area*coats)/coverage
 
+#Non-specific functions
+def increment_or_add_dict(key, value, dictionary):
+    if not key in dictionary:
+        dictionary[key] = value
+    else:
+        dictionary[key] += value
+
+    return dictionary
+
+def try_expect_input(message):
+    while True:
+        inp = input(message)
+        try:
+            return inp
+        except:
+            print("Wrong value inputted")
+            
+def try_expect_input_float(message):
+    while True:
+        inp = input(message)
+        try:
+            return float(inp)
+        except:
+            print("Wrong value inputted")
+
+def try_expect_input_int(message):
+    while True:
+        inp = input(message)
+        try:
+            return int(inp)
+        except:
+            print("Wrong value inputted")
+
+#Init functions
 
 def init_wall():
     wall = classes.Wall()
@@ -21,37 +53,18 @@ def load_paints():
     return json.load(open("Data/paints.json", "r"))
 
 
+def calculate_liters_of_paint(area, coats, coverage):
+    return (area*coats)/coverage
+
+
 def choose_item(item, dictionary):
     temp_dict = {}
     print("\nChoose " + item + " you will be using")
     for i, key in enumerate(dictionary.keys()):
         temp_dict[i] = key
         print(str(i) + " - " + key)
-    inp = int(input())
+    inp = try_expect_input_int("")
     return temp_dict[inp]
-
-def buckets_needed(volume, volume_price_dict):
-    volume_PpL_dict = pounds_per_liter(volume_price_dict)
-    optimized_volume_PpL_dict = optimize_PpL(volume_PpL_dict)
-    sizes_sorted = sorted(sizes)
-    count_dict = {i:0 for i in sizes_sorted}
-    while (volume > 0) & bool(sizes_sorted):
-        if volume >= sizes_sorted[-1]:
-            volume -= sizes_sorted[-1]
-            count_dict[sizes_sorted[-1]] += 1
-        elif (volume < sizes_sorted[-1]):
-            copy_sizes_sorted = sizes_sorted.reverse()
-            print(copy_sizes_sorted)
-            smallest = 0
-            for y in sizes_sorted:
-                if y > volume:
-                    smallest = y
-                    
-    # do stuff with lst
-            volume -= smallest
-            count_dict[smallest] += 1
-    volume_leftover = volume
-    return volume_leftover, count_dict
 
 def pounds_per_liter(volume_price_dict, volume):
     volume_PpL_dict = {}
@@ -61,7 +74,6 @@ def pounds_per_liter(volume_price_dict, volume):
         volume_PpL_dict[can_volume] = PpL
         
     return volume_PpL_dict
-
 
 
 def best_PpL(volume_PpL_dict):
@@ -87,10 +99,13 @@ def price_of_cans(can_volume, volume_price_dict, volume, cans_count_dict):
         cans_count_dict = increment_or_add_dict(can_volume, cans_to_be_bought, cans_count_dict)
         return cans_to_be_bought * volume_price_dict[can_volume], volume%can_volume, cans_count_dict
 
-def increment_or_add_dict(key, value, dictionary):
-    if not key in dictionary:
-        dictionary[key] = value
-    else:
-        dictionary[key] += value
-
-    return dictionary
+def calculate_price_liters_left_cans_count(selected_paint, liters_left):
+    volume_price_dict = {dict["volume"]:dict["price"] for dict in selected_paint["buckets"]}
+    cans_count_dict = {}
+    price_total = 0
+    while liters_left > 0:
+        volume_PpL_dict = pounds_per_liter(volume_price_dict, liters_left)
+        best = best_PpL(volume_PpL_dict)
+        price, liters_left, cans_count_dict = price_of_cans(best, volume_price_dict, liters_left, cans_count_dict)
+        price_total += price
+    return price_total, liters_left, cans_count_dict

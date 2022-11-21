@@ -1,5 +1,6 @@
 import Classes.classes as classes
 import Functions.functions as functions
+import math
 
 
 def main():
@@ -32,45 +33,32 @@ def main():
                 chosen_color = functions.choose_item("color", colors)
                 selected_paint = colors[chosen_color]
                 
-                liters_left = 0
-                for wall in walls_list:
-                    wall.set_true_wall_area()
-                    liters_left += functions.calculate_liters_of_paint(wall.true_area, wall.coats, selected_paint["coverage"])
-
-                total_liters = liters_left
+                total_liters = classes.Wall.calculate_total_liters(walls_list, selected_paint)
+                liters_left = total_liters
                 print()
-                volume_price_dict = {dict["volume"]:dict["price"] for dict in selected_paint["buckets"]}
-
-                cans_count_dict = {}
-                price_total = 0
-                while liters_left > 0:
-                    volume_PpL_dict = functions.pounds_per_liter(volume_price_dict, liters_left)
-                    best_PpL = functions.best_PpL(volume_PpL_dict)
-                    price, liters_left, cans_count_dict = functions.price_of_cans(best_PpL, {2.5:12, 5:14, 10:20}, liters_left, cans_count_dict)
-
-                    price_total += price
-                print(cans_count_dict)
+                
+                price_total, liters_left, cans_count_dict = functions.calculate_price_liters_left_cans_count(selected_paint, liters_left)
                 
                 #Just print statements
-                print("To paint walls: \n")
+                print("To paint walls:")
                 for wall in walls_list:
                     print(str(wall.height) + " meters high by " + str(wall.width) + " meters wide with " + str(wall.coats) + " coats of paint.")
-                    print("This wall contains:")
-                    for surface in wall.surfaces_list:
-                        print(surface.name + " of size " + str(surface.height) + " by " + str(surface.width) + " meters.")
-                    print("\n")
-                print("You will need " + str(total_liters) +" liters of " + chosen_brand + " " +  chosen_color + " in total to paint all these walls")
+                    if wall.surfaces_list:
+                        print("This wall contains:")
+                        for surface in wall.surfaces_list:
+                            print(surface.name + " of size " + str(surface.height) + " by " + str(surface.width) + " meters.")
+                    print()
+                print("You will need " + str(math.ceil(total_liters * 100)/100) +" liters of " + chosen_brand + " " +  chosen_color + " in total to paint all these walls")
                 print("This means you will need:")
                 for volume, count in cans_count_dict.items():
                     print(str(count) + " of " + str(volume) + " liters buckets")
-                print("And it wil cost £" + str(price_total) + " and you will be left with " + str(abs(liters_left)) + " liters of paint")
+                print("And it wil cost £" + str(price_total) + " and you will be left with " + str(math.floor(abs(liters_left) * 100)/100) + " liters of paint")
                 break
             case _:
                 print("Wrong value inputted")
 
 
 if __name__ == "__main__":
-    pass
     main()
     
     
